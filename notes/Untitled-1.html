@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quicklearn — Sociology Revision Deck</title>
+
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+
+
+  :root{
+
+    --bg: #F4F1EA;
+
+    --ink: #1B1B1B;
+
+    --card: #FFFFFF;
+
+    --accent1: #E4572E;
+
+    --accent2: #17A398;
+
+    --accent3: #FFC914;
+
+    --accent4: #5B4B8A;
+
+    --muted: #6b6b6b;
+
+    --line: rgba(0,0,0,0.08);
+
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html,body{height:100%; background:var(--bg); font-family:'Inter',sans-serif; color:var(--ink); overflow:hidden;}
+
+
+
+  #app{position:relative; width:100vw; height:100vh; display:flex; flex-direction:column;}
+
+
+
+  /* ---------- TOP BAR ---------- */
+
+  #topbar{
+
+    display:flex; align-items:center; justify-content:space-between;
+
+    padding:18px 32px; z-index:20; position:relative;
+
+  }
+
+  .logo{
+
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px;
+
+    letter-spacing:-0.5px; display:flex; align-items:center; gap:10px;
+
+  }
+
+  .logo .dot{width:10px; height:10px; border-radius:50%; background:var(--accent1); display:inline-block;}
+
+  .progress-wrap{flex:1; max-width:400px; margin:0 32px; height:4px; background:var(--line); border-radius:2px; overflow:hidden;}
+
+  .progress-bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent1),var(--accent3)); transition:width .5s cubic-bezier(.65,0,.35,1);}
+
+  .counter{font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; color:var(--muted); white-space:nowrap;}
+
+
+
+  /* ---------- NAV DOTS (side) ---------- */
+
+  #modnav{
+
+    position:fixed; left:24px; top:50%; transform:translateY(-50%);
+
+    display:flex; flex-direction:column; gap:14px; z-index:25;
+
+  }
+
+  .modnav-item{
+
+    display:flex; align-items:center; gap:10px; cursor:pointer; opacity:.4; transition:opacity .3s;
+
+  }
+
+  .modnav-item.active{opacity:1;}
+
+  .modnav-dot{width:9px; height:9px; border-radius:50%; background:var(--ink); transition:all .3s;}
+
+  .modnav-item.active .modnav-dot{background:var(--accent1); transform:scale(1.3);}
+
+  .modnav-label{font-size:11px; font-family:'Space Grotesk',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.5px; display:none;}
+
+
+
+  /* ---------- SLIDE STAGE ---------- */
+
+  #stage{flex:1; position:relative; overflow:hidden;}
+
+  .slide{
+
+    position:absolute; inset:0; padding:40px 90px 100px;
+
+    display:flex; flex-direction:column; justify-content:center;
+
+    opacity:0; transform:translateY(40px) scale(.98);
+
+    pointer-events:none; transition:opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
+
+    overflow-y:auto;
+
+  }
+
+  .slide.active{opacity:1; transform:translateY(0) scale(1); pointer-events:auto;}
+
+  .slide::-webkit-scrollbar{width:6px;}
+
+  .slide::-webkit-scrollbar-thumb{background:var(--line); border-radius:3px;}
+
+
+
+  .eyebrow{
+
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px; letter-spacing:2px;
+
+    text-transform:uppercase; color:var(--accent1); margin-bottom:10px;
+
+    opacity:0; transform:translateX(-16px);
+
+  }
+
+  .slide.active .eyebrow{animation:slideIn .6s .05s cubic-bezier(.22,1,.36,1) forwards;}
+
+
+
+  h1.title{
+
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(28px,4vw,52px);
+
+    letter-spacing:-1px; line-height:1.05; margin-bottom:8px;
+
+    opacity:0; transform:translateY(20px);
+
+  }
+
+  .slide.active h1.title{animation:slideIn .65s .1s cubic-bezier(.22,1,.36,1) forwards;}
+
+
+
+  .subtitle{font-size:16px; color:var(--muted); max-width:720px; margin-bottom:26px; line-height:1.55;
+
+    opacity:0; transform:translateY(14px);}
+
+  .slide.active .subtitle{animation:slideIn .65s .16s cubic-bezier(.22,1,.36,1) forwards;}
+
+
+
+  @keyframes slideIn{to{opacity:1; transform:translate(0,0);}}
+
+
+
+  .content-grid{display:grid; gap:20px; opacity:0; transform:translateY(20px);}
+
+  .slide.active .content-grid{animation:slideIn .65s .22s cubic-bezier(.22,1,.36,1) forwards;}
+
+
+
+  /* ---------- CARDS ---------- */
+
+  .card{
+
+    background:var(--card); border-radius:18px; padding:20px 22px;
+
+    border:1px solid var(--line); box-shadow:0 2px 10px rgba(0,0,0,.03);
+
+    transition:transform .3s ease, box-shadow .3s ease;
+
+  }
+
+  .card:hover{transform:translateY(-4px); box-shadow:0 12px 28px rgba(0,0,0,.08);}
+
+  .card h3{font-family:'Space Grotesk',sans-serif; font-size:16px; margin-bottom:8px; display:flex; align-items:center; gap:8px;}
+
+  .card p{font-size:13.5px; color:#444; line-height:1.5;}
+
+  .badge-num{
+
+    width:26px; height:26px; border-radius:50%; background:var(--ink); color:#fff; font-size:12px;
+
+    display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; flex-shrink:0;
+
+  }
+
+
+
+  .cols-3{grid-template-columns:repeat(3,1fr);}
+
+  .cols-2{grid-template-columns:repeat(2,1fr);}
+
+  .cols-4{grid-template-columns:repeat(4,1fr);}
+
+  @media (max-width:900px){.cols-3,.cols-4{grid-template-columns:repeat(2,1fr);} .cols-2{grid-template-columns:1fr;}}
+
+
+
+  /* ---------- FACT BOX ---------- */
+
+  .fact-box{
+
+    margin-top:18px; padding:16px 20px; border-radius:14px;
+
+    background:linear-gradient(135deg, var(--accent3), #ffe27a);
+
+    display:flex; gap:12px; align-items:flex-start;
+
+    opacity:0; transform:translateY(16px);
+
+  }
+
+  .slide.active .fact-box{animation:slideIn .6s .38s cubic-bezier(.22,1,.36,1) forwards;}
+
+  .fact-box .icon{font-size:22px;}
+
+  .fact-box p{font-size:13.5px; font-weight:500; line-height:1.5;}
+
+  .fact-box strong{font-family:'Space Grotesk',sans-serif;}
+
+
+
+  /* ---------- TABLE ---------- */
+
+  table.cmp{width:100%; border-collapse:collapse; background:var(--card); border-radius:14px; overflow:hidden; border:1px solid var(--line);}
+
+  table.cmp th{background:var(--ink); color:#fff; font-family:'Space Grotesk',sans-serif; font-size:13px; text-align:left; padding:12px 16px;}
+
+  table.cmp td{padding:11px 16px; font-size:13px; border-bottom:1px solid var(--line); line-height:1.4;}
+
+  table.cmp tr:last-child td{border-bottom:none;}
+
+  table.cmp tr:nth-child(even){background:#faf9f6;}
+
+
+
+  /* ---------- FIGURES: bars / donut / timeline ---------- */
+
+  .fig-wrap{display:flex; align-items:center; justify-content:center; gap:40px; flex-wrap:wrap;}
+
+  .bar-chart{display:flex; align-items:flex-end; gap:18px; height:180px;}
+
+  .bar{width:44px; border-radius:8px 8px 0 0; position:relative; display:flex; align-items:flex-end; justify-content:center;
+
+    transform:scaleY(0); transform-origin:bottom; transition:transform 1s cubic-bezier(.22,1,.36,1);}
+
+  .slide.active .bar{transform:scaleY(1);}
+
+  .bar span{position:absolute; top:-22px; font-size:11px; font-weight:700; font-family:'Space Grotesk',sans-serif;}
+
+  .bar-label{position:absolute; bottom:-24px; font-size:11px; color:var(--muted); white-space:nowrap;}
+
+
+
+  .donut{position:relative; width:170px; height:170px; border-radius:50%;
+
+    background:conic-gradient(var(--accent1) 0% 79.8%, var(--accent2) 79.8% 94%, var(--accent4) 94% 95.7%, var(--accent3) 95.7% 97.4%, #ccc 97.4% 100%);
+
+    display:flex; align-items:center; justify-content:center;
+
+    transform:scale(0) rotate(-90deg); transition:transform .9s cubic-bezier(.34,1.56,.64,1);}
+
+  .slide.active .donut{transform:scale(1) rotate(0deg);}
+
+  .donut::after{content:''; width:98px; height:98px; background:var(--bg); border-radius:50%; position:absolute;}
+
+  .donut-legend{display:flex; flex-direction:column; gap:8px; font-size:12.5px;}
+
+  .donut-legend div{display:flex; align-items:center; gap:8px;}
+
+  .lg{width:10px; height:10px; border-radius:3px; flex-shrink:0;}
+
+
+
+  .timeline{position:relative; padding-left:20px; margin-top:10px;}
+
+  .timeline::before{content:''; position:absolute; left:6px; top:6px; bottom:6px; width:2px; background:var(--line);}
+
+  .tl-item{position:relative; padding:0 0 22px 26px; opacity:0; transform:translateX(-10px);}
+
+  .slide.active .tl-item{animation:slideIn .5s cubic-bezier(.22,1,.36,1) forwards;}
+
+  .tl-item::before{content:''; position:absolute; left:-20px; top:3px; width:14px; height:14px; border-radius:50%; background:var(--accent1); border:3px solid var(--bg); box-shadow:0 0 0 2px var(--accent1);}
+
+  .tl-item h4{font-family:'Space Grotesk',sans-serif; font-size:14px; margin-bottom:3px;}
+
+  .tl-item p{font-size:12.5px; color:var(--muted); line-height:1.4;}
+
+
+
+  .stat-hero{display:flex; gap:26px; flex-wrap:wrap;}
+
+  .stat-num{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:44px; color:var(--accent1); line-height:1;}
+
+  .stat-cap{font-size:12px; color:var(--muted); margin-top:4px; max-width:160px;}
+
+
+
+  .pill{display:inline-block; padding:5px 12px; border-radius:20px; background:var(--ink); color:#fff; font-size:11px; font-family:'Space Grotesk',sans-serif; font-weight:600; margin-bottom:10px;}
+
+
+
+  .toggle-wrap{display:flex; gap:10px; margin-bottom:14px;}
+
+  .toggle-btn{padding:8px 16px; border-radius:10px; border:1px solid var(--line); background:var(--card); cursor:pointer; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px; transition:all .25s;}
+
+  .toggle-btn.active{background:var(--ink); color:#fff;}
+
+  .toggle-panel{display:none;}
+
+  .toggle-panel.show{display:block; animation:fadeIn .4s ease;}
+
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+
+
+
+  .flow-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+
+  .flow-node{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:12.5px; font-weight:600; font-family:'Space Grotesk',sans-serif; text-align:center; min-width:100px;}
+
+  .flow-arrow{font-size:20px; color:var(--accent1);}
+
+
+
+  /* ---------- TITLE / SECTION SLIDES ---------- */
+
+  .cover{align-items:flex-start; justify-content:center;}
+
+  .cover h1{font-size:clamp(40px,7vw,90px); line-height:.95;}
+
+  .cover .big-sub{font-size:18px; color:var(--muted); max-width:600px; margin-top:16px;}
+
+  .cover-tags{display:flex; gap:10px; margin-top:26px; flex-wrap:wrap;}
+
+  .tag{padding:7px 14px; border-radius:20px; border:1px solid var(--ink); font-size:12px; font-family:'Space Grotesk',sans-serif; font-weight:600;}
+
+
+
+  .section-slide{align-items:center; text-align:center;}
+
+  .section-num{font-family:'Space Grotesk',sans-serif; font-size:120px; font-weight:700; opacity:.08; position:absolute; top:30px; right:60px;}
+
+  .section-slide h1{font-size:clamp(38px,6vw,80px); margin:0 auto;}
+
+  .section-slide .subtitle{margin:16px auto 0;}
+
+
+
+  /* ---------- CONTROLS ---------- */
+
+  #controls{
+
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+
+    display:flex; align-items:center; gap:14px; z-index:30;
+
+    background:var(--card); border:1px solid var(--line); border-radius:40px; padding:10px 14px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+  }
+
+  .ctrl-btn{
+
+    width:42px; height:42px; border-radius:50%; border:none; background:var(--ink); color:#fff;
+
+    font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+
+    transition:transform .2s, background .2s;
+
+  }
+
+  .ctrl-btn:hover{transform:scale(1.08); background:var(--accent1);}
+
+  .ctrl-btn:disabled{opacity:.3; cursor:default; transform:none; background:var(--ink);}
+
+  #autoBtn.playing{background:var(--accent2);}
+
+  .kbdhint{font-size:11px; color:var(--muted); padding:0 6px; font-family:'Space Grotesk',sans-serif;}
+
+
+
+  @media (max-width:768px){
+
+    .slide{padding:24px 22px 110px;}
+
+    #modnav{display:none;}
+
+    .fig-wrap{gap:20px;}
+
+  }
+
+</style>
+
+</head>
+
+<body>
+
+<div id="app">
+
+
+
+  <div id="topbar">
+
+    <div class="logo"><span class="dot"></span>Verano</div>
+
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div class="counter"><span id="curNum">1</span> / <span id="totalNum">1</span></div>
+
+  </div>
+
+
+
+  <div id="modnav"></div>
+
+
+
+  <div id="stage"></div>
+
+
+
+  <div id="controls">
+
+    <button class="ctrl-btn" id="prevBtn" title="Previous (←)">‹</button>
+
+    <button class="ctrl-btn" id="autoBtn" title="Autoplay">▶</button>
+
+    <button class="ctrl-btn" id="nextBtn" title="Next (→)">›</button>
+
+    <span class="kbdhint">use ← → or space</span>
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+/* ======================= SLIDE DATA ======================= */
+
+const modules = [
+
+  {id:'m0', label:'Cover'},
+
+  {id:'m1', label:'Population'},
+
+  {id:'m2', label:'Society & Culture'},
+
+  {id:'m3', label:'Stratification'},
+
+  {id:'m4', label:'Social Problems'},
+
+  {id:'m5', label:'Human Behaviour'},
+
+];
+
+
+
+function el(html){ const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstChild; }
+
+
+
+const stage = document.getElementById('stage');
+
+const slides = [];
+
+
+
+function addSlide(moduleIndex, innerHTML, extraClass=''){
+
+  const s = el(`<section class="slide ${extraClass}" data-mod="${moduleIndex}">${innerHTML}</section>`);
+
+  stage.appendChild(s);
+
+  slides.push(s);
+
+  return s;
+
+}
+
+
+
+/* ---------------- COVER ---------------- */
+
+addSlide(0, `
+
+  <div class="cover">
+
+    <span class="pill">Quick Revision Deck</span>
+
+    <h1 class="title">Sociology,<br>fast-tracked.</h1>
+
+    <p class="big-sub">Five modules — Population, Society & Culture, Stratification, Social Problems, and Human Behaviour — distilled into figures, tables and facts built for rapid memorization.</p>
+
+    <div class="cover-tags">
+
+      <span class="tag">Module 1 · Population</span>
+
+      <span class="tag">Module 2 · Culture</span>
+
+      <span class="tag">Module 3 · Stratification</span>
+
+      <span class="tag">Module 4 · Social Problems</span>
+
+      <span class="tag">Module 5 · Behaviour</span>
+
+    </div>
+
+  </div>
+
+`, 'cover active');
+
+
+
+/* ================= MODULE 1: POPULATION ================= */
+
+
+
+addSlide(1, `
+
+  <div class="section-slide">
+
+    <span class="section-num">01</span>
+
+    <span class="pill">Module 1</span>
+
+    <h1 class="title">Characteristics of<br>Indian Population</h1>
+
+    <p class="subtitle">The demographic "profile" of India — size, distribution, and traits of its people.</p>
+
+  </div>
+
+`, 'section-slide');
+
+
+
+addSlide(1, `
+
+  <span class="eyebrow">01 · Population</span>
+
+  <h1 class="title">India's population profile</h1>
+
+  <p class="subtitle">Three defining traits every exam answer should mention.</p>
+
+  <div class="content-grid cols-3">
+
+    <div class="card"><h3>🌍 Massive Size</h3><p>India is the most populous country in the world.</p></div>
+
+    <div class="card"><h3>🏘️ Rural Majority</h3><p>Most people still live in villages, though cities are growing fast.</p></div>
+
+    <div class="card"><h3>⚖️ Uneven Distribution</h3><p>Some states are packed with people, others are mostly empty.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> In 2023, India overtook China as the #1 most populated country on Earth. Uttar Pradesh alone has more people than all of Brazil.</p></div>
+
+`);
+
+
+
+addSlide(1, `
+
+  <span class="eyebrow">01 · Population Growth</span>
+
+  <h1 class="title">4 stages of growth</h1>
+
+  <p class="subtitle">How India's population curve evolved across a century.</p>
+
+  <div class="timeline">
+
+    <div class="tl-item" style="animation-delay:.1s"><h4>1901–1921 · Stagnant</h4><p>High birth + high death rates → population barely grew.</p></div>
+
+    <div class="tl-item" style="animation-delay:.25s"><h4>1921–1951 · Steady Growth</h4><p>Death rates dropped (better hospitals); birth rates stayed high. 1921 = "Year of the Great Divide."</p></div>
+
+    <div class="tl-item" style="animation-delay:.4s"><h4>1951–1981 · Population Explosion</h4><p>Death rates fell massively → rapid growth.</p></div>
+
+    <div class="tl-item" style="animation-delay:.55s"><h4>1981–Present · High but Slowing</h4><p>Still growing, but rate is slowing as families have fewer kids.</p></div>
+
+  </div>
+
+`);
+
+
+
+addSlide(1, `
+
+  <span class="eyebrow">01 · Age Composition</span>
+
+  <h1 class="title">Three age groups</h1>
+
+  <p class="subtitle">India's "Demographic Dividend" — a young, working nation.</p>
+
+  <div class="fig-wrap">
+
+    <div class="bar-chart">
+
+      <div class="bar" style="height:45%; background:var(--accent3);"><span>0–14</span><div class="bar-label">Children</div></div>
+
+      <div class="bar" style="height:100%; background:var(--accent1); transition-delay:.15s;"><span>15–59</span><div class="bar-label">Working age</div></div>
+
+      <div class="bar" style="height:22%; background:var(--accent4); transition-delay:.3s;"><span>60+</span><div class="bar-label">Elderly</div></div>
+
+    </div>
+
+    <div class="stat-hero">
+
+      <div><div class="stat-num">50%+</div><div class="stat-cap">of Indians are under age 25</div></div>
+
+    </div>
+
+  </div>
+
+  <div class="fact-box" style="margin-top:40px;"><span class="icon">💡</span><p><strong>Demographic Dividend:</strong> working-age population outsizes the dependent population — a huge economic opportunity.</p></div>
+
+`);
+
+
+
+addSlide(1, `
+
+  <span class="eyebrow">01 · Sex Ratio</span>
+
+  <h1 class="title">Females per 1,000 males</h1>
+
+  <p class="subtitle">Formula: (Number of Females ÷ Number of Males) × 1000</p>
+
+  <div class="content-grid cols-2">
+
+    <div class="card"><h3>🥇 Highest — Kerala</h3><p>More females than males; historically India's top-ranked state for sex ratio.</p></div>
+
+    <div class="card"><h3>🥉 Lowest — Haryana</h3><p>Traditionally records the lowest sex ratio in the country.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> Recent National Family Health Surveys suggest India may now have ~1,020 women per 1,000 men — a historic first.</p></div>
+
+`);
+
+
+
+addSlide(1, `
+
+  <span class="eyebrow">01 · Religion Composition</span>
+
+  <h1 class="title">Religious breakdown (2011 Census)</h1>
+
+  <div class="fig-wrap">
+
+    <div class="donut"></div>
+
+    <div class="donut-legend">
+
+      <div><span class="lg" style="background:var(--accent1)"></span>Hindu — 79.8%</div>
+
+      <div><span class="lg" style="background:var(--accent2)"></span>Muslim — 14.2%</div>
+
+      <div><span class="lg" style="background:var(--accent4)"></span>Christian — 2.3%</div>
+
+      <div><span class="lg" style="background:var(--accent3)"></span>Sikh — 1.7%</div>
+
+      <div><span class="lg" style="background:#ccc"></span>Others — 1.9%</div>
+
+    </div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> India is the birthplace of four major world religions — Hinduism, Buddhism, Jainism, and Sikhism.</p></div>
+
+`);
+
+
+
+addSlide(1, `
+
+  <span class="eyebrow">01 · Language Composition</span>
+
+  <h1 class="title">A nation of many tongues</h1>
+
+  <div class="content-grid cols-3">
+
+    <div class="card"><h3>🗣️ No Single Language</h3><p>India is incredibly diverse; there is no single national language.</p></div>
+
+    <div class="card"><h3>📜 22 Official Languages</h3><p>Recognized in the 8th Schedule of the Constitution.</p></div>
+
+    <div class="card"><h3>🏆 Hindi Leads</h3><p>Spoken by the most people, followed by Bengali and Marathi.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> Counting every dialect, over 19,500 distinct languages/dialects are spoken as mother tongues across India!</p></div>
+
+`);
+
+
+
+addSlide(1, `
+
+  <span class="eyebrow">01 · Occupational Structure</span>
+
+  <h1 class="title">Three economic sectors</h1>
+
+  <div class="flow-row">
+
+    <div class="flow-node">🌾 Primary<br>Agriculture, Mining<br><small>largest employment</small></div>
+
+    <div class="flow-arrow">→</div>
+
+    <div class="flow-node">🏭 Secondary<br>Manufacturing<br><small>raw → goods</small></div>
+
+    <div class="flow-arrow">→</div>
+
+    <div class="flow-node">💻 Tertiary<br>Services / IT / Banking<br><small>fastest growing</small></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> IT and services earn India the most money, yet farming still provides daily jobs to nearly half the population.</p></div>
+
+`);
+
+
+
+addSlide(1, `
+
+  <span class="eyebrow">01 · National Population Policy (NPP 2000)</span>
+
+  <h1 class="title">Government's rulebook</h1>
+
+  <div class="content-grid cols-3">
+
+    <div class="card"><h3><span class="badge-num">1</span> Free Education</h3><p>Free & compulsory school education up to age 14.</p></div>
+
+    <div class="card"><h3><span class="badge-num">2</span> Reduce Infant Mortality</h3><p>Prevent babies dying from preventable diseases.</p></div>
+
+    <div class="card"><h3><span class="badge-num">3</span> Delay Marriage</h3><p>Encourage marriage after 18, preferably 20, for girls.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Goal:</strong> a fully "stable" population — birth rate matching death rate — by the year <strong>2045</strong>.</p></div>
+
+`);
+
+
+
+/* ================= MODULE 2: SOCIETY & CULTURE ================= */
+
+
+
+addSlide(2, `
+
+  <div class="section-slide">
+
+    <span class="section-num">02</span>
+
+    <span class="pill">Module 2</span>
+
+    <h1 class="title">Society &<br>Culture</h1>
+
+    <p class="subtitle">Types of Indian society, what culture really is, and India vs. the West.</p>
+
+  </div>
+
+`, 'section-slide');
+
+
+
+addSlide(2, `
+
+  <span class="eyebrow">02 · Society & Its Types</span>
+
+  <h1 class="title">Three types of society</h1>
+
+  <div class="content-grid cols-3">
+
+    <div class="card"><h3>🌳 Tribal Society</h3><p>Adivasis close to nature, forests/hills, strong equality, hunting/gathering/basic farming.</p></div>
+
+    <div class="card"><h3>🌾 Agrarian (Rural)</h3><p>Village life centered on farming, joint families, strong community bonds.</p></div>
+
+    <div class="card"><h3>🏙️ Industrial (Urban)</h3><p>Cities, factories, IT & business, nuclear families, formal/professional ties.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> India has over 700 recognized Scheduled Tribes — the largest tribal population of any country in the world.</p></div>
+
+`);
+
+
+
+addSlide(2, `
+
+  <span class="eyebrow">02 · Culture</span>
+
+  <h1 class="title">Culture = "way of life"</h1>
+
+  <p class="subtitle">E.B. Tylor's classic definition — memorize it exactly for exams.</p>
+
+  <div class="content-grid cols-4">
+
+    <div class="card"><h3>📚 Learned</h3><p>Not born with it — passed on by parents & society.</p></div>
+
+    <div class="card"><h3>🤝 Shared</h3><p>Millions of people hold the same habits/beliefs.</p></div>
+
+    <div class="card"><h3>🔄 Transmitted</h3><p>Passed generation to generation.</p></div>
+
+    <div class="card"><h3>⚡ Dynamic</h3><p>Changes over time — dhotis to jeans.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> "Namaste" comes from Sanskrit and literally means "I bow to the divine in you."</p></div>
+
+`);
+
+
+
+addSlide(2, `
+
+  <span class="eyebrow">02 · Cultural Diversity</span>
+
+  <h1 class="title">Unity in diversity</h1>
+
+  <div class="content-grid cols-3">
+
+    <div class="card"><h3>🗺️ Geographical</h3><p>Himalayan food/dress differs completely from coastal South India.</p></div>
+
+    <div class="card"><h3>🕉️ Religious</h3><p>Hindus, Muslims, Christians, Sikhs, Buddhists, Jains, and more coexist.</p></div>
+
+    <div class="card"><h3>🗣️ Linguistic</h3><p>Almost every state has its own primary language and literature.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> A Rupee note prints its value in 15 regional languages, plus Hindi & English — proof of linguistic diversity.</p></div>
+
+`);
+
+
+
+addSlide(2, `
+
+  <span class="eyebrow">02 · Indian vs. Western Culture</span>
+
+  <h1 class="title">Side-by-side comparison</h1>
+
+  <table class="cmp">
+
+    <tr><th>Feature</th><th>Indian Culture</th><th>Western Culture</th></tr>
+
+    <tr><td>Core Philosophy</td><td>Collectivism ("We") — family/community first</td><td>Individualism ("I") — personal freedom first</td></tr>
+
+    <tr><td>Family Structure</td><td>Joint / extended families</td><td>Nuclear families</td></tr>
+
+    <tr><td>Marriage</td><td>Bond of two families; arranged marriage common</td><td>Bond of two individuals; personal choice/love</td></tr>
+
+    <tr><td>Social Behavior</td><td>High reverence for elders; formal respect</td><td>Focus on equality; casual, informal</td></tr>
+
+    <tr><td>Religion & Logic</td><td>Highly spiritual, intertwined with daily life</td><td>Highly secular; science/religion separated</td></tr>
+
+  </table>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> Living with parents into your 20s–30s is normal in India — a sign of family duty, not weakness.</p></div>
+
+`);
+
+
+
+/* ================= MODULE 3: STRATIFICATION ================= */
+
+
+
+addSlide(3, `
+
+  <div class="section-slide">
+
+    <span class="section-num">03</span>
+
+    <span class="pill">Module 3</span>
+
+    <h1 class="title">Social<br>Stratification</h1>
+
+    <p class="subtitle">Society's hierarchy — caste, class, communities, and constitutional protections.</p>
+
+  </div>
+
+`, 'section-slide');
+
+
+
+addSlide(3, `
+
+  <span class="eyebrow">03 · Social Stratification</span>
+
+  <h1 class="title">The "ladder" of society</h1>
+
+  <p class="subtitle">Ranking individuals/groups by wealth, power, and prestige — an enduring hierarchy.</p>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> "Stratification" is borrowed from Geology — the layered strata of rock — describing society's layers of people.</p></div>
+
+`);
+
+
+
+addSlide(3, `
+
+  <span class="eyebrow">03 · Caste vs. Class</span>
+
+  <h1 class="title">Two systems, compared</h1>
+
+  <table class="cmp">
+
+    <tr><th>Feature</th><th>Caste System</th><th>Class System</th></tr>
+
+    <tr><td>Basis</td><td>Ascribed — born into it</td><td>Achieved — earned via wealth/education/job</td></tr>
+
+    <tr><td>Mobility</td><td>Closed — cannot change</td><td>Open — can move up or down</td></tr>
+
+    <tr><td>Marriage Rules</td><td>Endogamy — must marry within caste</td><td>Exogamy allowed across classes</td></tr>
+
+    <tr><td>Where Found</td><td>Almost unique to India / South Asia</td><td>Found globally, esp. Western capitalist societies</td></tr>
+
+  </table>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> "Caste" comes from Portuguese <em>'Casta'</em>, meaning "race" or "pure breed" — introduced by 16th-century explorers.</p></div>
+
+`);
+
+
+
+addSlide(3, `
+
+  <span class="eyebrow">03 · Communities & Ethnic Groups</span>
+
+  <h1 class="title">Belonging & heritage</h1>
+
+  <div class="content-grid cols-2">
+
+    <div class="card"><h3>🏡 Community</h3><p>People living together sharing a "we-feeling" or sense of belonging (e.g. a village or neighborhood).</p></div>
+
+    <div class="card"><h3>🧬 Ethnic Group</h3><p>Connected by shared cultural heritage, ancestry, history, or language (e.g. Bengalis, Punjabis, Tamils).</p></div>
+
+  </div>
+
+`);
+
+
+
+addSlide(3, `
+
+  <span class="eyebrow">03 · Weaker Sections & Minorities</span>
+
+  <h1 class="title">Who needs protection</h1>
+
+  <div class="content-grid cols-4">
+
+    <div class="card"><h3>SC</h3><p>Scheduled Castes — historically "untouchables" (Dalits), faced severe discrimination.</p></div>
+
+    <div class="card"><h3>ST</h3><p>Scheduled Tribes — indigenous Adivasis in forests/hills, cut off from mainstream development.</p></div>
+
+    <div class="card"><h3>OBC</h3><p>Other Backward Classes — educationally/socially backward, not SC/ST.</p></div>
+
+    <div class="card"><h3>Minorities</h3><p>Groups based on religion (Muslims, Christians, Sikhs) or language.</p></div>
+
+  </div>
+
+`);
+
+
+
+addSlide(3, `
+
+  <span class="eyebrow">03 · Constitutional Provisions</span>
+
+  <h1 class="title">Key Articles to memorize</h1>
+
+  <div class="content-grid cols-2">
+
+    <div class="card"><h3>Article 15</h3><p>Prohibits discrimination on grounds of religion, race, caste, sex, or place of birth.</p></div>
+
+    <div class="card"><h3>Article 17</h3><p>Abolishes "Untouchability" — makes its practice a punishable crime.</p></div>
+
+    <div class="card"><h3>Article 46</h3><p>State shall promote educational & economic interests of weaker sections (SC/ST).</p></div>
+
+    <div class="card"><h3>Articles 330 & 332</h3><p>Reserve seats for SCs/STs in Lok Sabha & State Legislative Assemblies.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> Dr. B.R. Ambedkar, chief architect of the Constitution, was Dalit himself and drafted these exact protections.</p></div>
+
+`);
+
+
+
+/* ================= MODULE 4: SOCIAL PROBLEMS ================= */
+
+
+
+addSlide(4, `
+
+  <div class="section-slide">
+
+    <span class="section-num">04</span>
+
+    <span class="pill">Module 4</span>
+
+    <h1 class="title">Social<br>Problems</h1>
+
+    <p class="subtitle">Four groups: economic trap, law & order, labor/displacement, social vulnerability.</p>
+
+  </div>
+
+`, 'section-slide');
+
+
+
+addSlide(4, `
+
+  <span class="eyebrow">04 · Group 1 — Core Economic Trap</span>
+
+  <h1 class="title">Four interlinked problems</h1>
+
+  <div class="flow-row">
+
+    <div class="flow-node">💰 Poverty</div><div class="flow-arrow">→</div>
+
+    <div class="flow-node">📖 Illiteracy</div><div class="flow-arrow">→</div>
+
+    <div class="flow-node">🧑‍💼 Unemployment</div><div class="flow-arrow">→</div>
+
+    <div class="flow-node">🏚️ Housing / Slums</div>
+
+  </div>
+
+  <div class="content-grid cols-2" style="margin-top:22px;">
+
+    <div class="card"><h3>Poverty Line</h3><p>Calculated on affordable daily calories, not just cash income.</p></div>
+
+    <div class="card"><h3>Disguised Unemployment</h3><p>5 people work a farm that only needs 2 — the rest look employed but add nothing productive.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> Kerala's near-100% literacy correlates directly with its low poverty and high health outcomes.</p></div>
+
+`);
+
+
+
+addSlide(4, `
+
+  <span class="eyebrow">04 · Group 2 — Law & Order Breakdown</span>
+
+  <h1 class="title">Crime, delinquency & conflict</h1>
+
+  <div class="content-grid cols-4">
+
+    <div class="card"><h3>⚖️ Crime</h3><p>Intentional violation of criminal law, penalized by the state.</p></div>
+
+    <div class="card"><h3>🧒 Juvenile Delinquency</h3><p>Illegal acts by minors — called "delinquents," sent to reform homes, not prison.</p></div>
+
+    <div class="card"><h3>💣 Terrorism</h3><p>Unlawful violence/intimidation against civilians for political/ideological aims.</p></div>
+
+    <div class="card"><h3>🪖 Insurgency</h3><p>Armed rebellion against government; acts like an unofficial army seeking territory.</p></div>
+
+  </div>
+
+  <div class="toggle-wrap">
+
+    <button class="toggle-btn active" data-panel="p1">Adult Crime</button>
+
+    <button class="toggle-btn" data-panel="p2">Juvenile Offense</button>
+
+  </div>
+
+  <div class="toggle-panel show" id="p1"><div class="card"><p>Tried under criminal law; can face adult prison sentencing depending on severity.</p></div></div>
+
+  <div class="toggle-panel" id="p2"><div class="card"><p>Never sent to adult prison — placed in observation/reform homes focused on rehabilitation, not punishment.</p></div></div>
+
+`);
+
+
+
+addSlide(4, `
+
+  <span class="eyebrow">04 · Group 3 — Labor & Displacement</span>
+
+  <h1 class="title">Work, migration & loss</h1>
+
+  <div class="content-grid cols-4">
+
+    <div class="card"><h3>🧒 Child Labour</h3><p>Employing children in ways that harm schooling & childhood.</p></div>
+
+    <div class="card"><h3>🚶 Migration</h3><p>Moving from village to city in search of better opportunity.</p></div>
+
+    <div class="card"><h3>🫁 Occupational Diseases</h3><p>Chronic illness from work — e.g. Silicosis in stone/glass cutters.</p></div>
+
+    <div class="card"><h3>🏗️ Project Affected People</h3><p>Displaced by dams, highways, and large infrastructure projects.</p></div>
+
+  </div>
+
+`);
+
+
+
+addSlide(4, `
+
+  <span class="eyebrow">04 · Group 4 — Social Vulnerability</span>
+
+  <h1 class="title">The most exposed groups</h1>
+
+  <div class="content-grid cols-4">
+
+    <div class="card"><h3>🚷 Social Destitute</h3><p>Abandoned by society, no income or family support.</p></div>
+
+    <div class="card"><h3>🙏 Beggary</h3><p>Asking strangers for money to survive; criminalized under the Bombay Prevention of Begging Act.</p></div>
+
+    <div class="card"><h3>👴 Aged Population</h3><p>Declining health, lost income, social isolation as children move away.</p></div>
+
+    <div class="card"><h3>🏠 Family Life Problems</h3><p>Domestic violence, divorce, dowry disputes, generational conflict.</p></div>
+
+  </div>
+
+`);
+
+
+
+/* ================= MODULE 5: HUMAN BEHAVIOUR ================= */
+
+
+
+addSlide(5, `
+
+  <div class="section-slide">
+
+    <span class="section-num">05</span>
+
+    <span class="pill">Module 5</span>
+
+    <h1 class="title">Human<br>Behaviour</h1>
+
+    <p class="subtitle">The "source code" of how people operate — overview, importance, and causes.</p>
+
+  </div>
+
+`, 'section-slide');
+
+
+
+addSlide(5, `
+
+  <span class="eyebrow">05 · Overview</span>
+
+  <h1 class="title">What is behaviour?</h1>
+
+  <p class="subtitle">Physical, mental & social activity — in response to internal or external stimuli.</p>
+
+  <div class="content-grid cols-3">
+
+    <div class="card"><h3>👀 Observable</h3><p>Visible actions — like someone running away.</p></div>
+
+    <div class="card"><h3>🧠 Unobservable</h3><p>Internal states — thinking, feeling anxious.</p></div>
+
+    <div class="card"><h3>🎯 Goal-Oriented</h3><p>Usually done to gain something wanted or avoid something feared.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> Only ~5% of daily behavior is fully conscious — the other 95% runs on subconscious autopilot.</p></div>
+
+`);
+
+
+
+addSlide(5, `
+
+  <span class="eyebrow">05 · Importance of Studying It</span>
+
+  <h1 class="title">Why we study behaviour</h1>
+
+  <div class="content-grid cols-3">
+
+    <div class="card"><h3><span class="badge-num">1</span> Predict Actions</h3><p>Knowing fear responses helps predict crowd behavior in emergencies.</p></div>
+
+    <div class="card"><h3><span class="badge-num">2</span> Solve Crimes & Conflicts</h3><p>Understanding motive is as vital as knowing method — helps catch bad actors.</p></div>
+
+    <div class="card"><h3><span class="badge-num">3</span> Improve Society</h3><p>Understanding habits helps design better public policy.</p></div>
+
+  </div>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> Tech companies engineer colors, buttons & notifications to trigger dopamine and keep you hooked.</p></div>
+
+`);
+
+
+
+addSlide(5, `
+
+  <span class="eyebrow">05 · Determinants of Behaviour</span>
+
+  <h1 class="title">Nature vs. Nurture</h1>
+
+  <p class="subtitle">Three forces that shape every action — memorize this table.</p>
+
+  <table class="cmp">
+
+    <tr><th>Determinant</th><th>What it means</th><th>Examples</th></tr>
+
+    <tr><td>1. Biological (Nature)</td><td>The hardware you're born with</td><td>Genetics, brain chemistry, physical health, nervous system</td></tr>
+
+    <tr><td>2. Psychological</td><td>Your mental software</td><td>Intelligence, personality, memory, emotions</td></tr>
+
+    <tr><td>3. Socio-Cultural (Nurture)</td><td>The environment that shaped you</td><td>Family, religion, social class, peer group, culture</td></tr>
+
+  </table>
+
+  <div class="fact-box"><span class="icon">💡</span><p><strong>Amazing Fact:</strong> Nature and Nurture work together — genetics may allow height, but poor nutrition (Nurture) can prevent reaching it.</p></div>
+
+`);
+
+
+
+/* ---------------- END ---------------- */
+
+addSlide(5, `
+
+  <div class="cover">
+
+    <span class="pill">Deck Complete</span>
+
+    <h1 class="title">Review done.<br>Go ace it.</h1>
+
+    <p class="big-sub">You've covered Population, Society & Culture, Stratification, Social Problems, and Human Behaviour — with every key fact, table, and figure needed for quick recall.</p>
+
+    <div class="cover-tags">
+
+      <span class="tag">Press ← to review any module</span>
+
+    </div>
+
+  </div>
+
+`, 'cover');
+
+
+
+/* ======================= NAV LOGIC ======================= */
+
+let current = 0;
+
+const totalSlides = slides.length;
+
+document.getElementById('totalNum').textContent = totalSlides;
+
+
+
+const modnav = document.getElementById('modnav');
+
+modules.forEach((m, i) => {
+
+  const item = el(`<div class="modnav-item" data-mod="${i}"><span class="modnav-dot"></span><span class="modnav-label">${m.label}</span></div>`);
+
+  item.addEventListener('click', () => {
+
+    const idx = slides.findIndex(s => parseInt(s.dataset.mod) === i);
+
+    if (idx >= 0) goTo(idx);
+
+  });
+
+  modnav.appendChild(item);
+
+});
+
+
+
+function updateModNav(modIdx){
+
+  [...modnav.children].forEach(c => c.classList.toggle('active', parseInt(c.dataset.mod) === modIdx));
+
+}
+
+
+
+function goTo(idx){
+
+  if (idx < 0 || idx >= totalSlides) return;
+
+  slides[current].classList.remove('active');
+
+  current = idx;
+
+  slides[current].classList.add('active');
+
+  document.getElementById('curNum').textContent = current + 1;
+
+  document.getElementById('progressBar').style.width = `${((current+1)/totalSlides)*100}%`;
+
+  updateModNav(parseInt(slides[current].dataset.mod));
+
+  document.getElementById('prevBtn').disabled = current === 0;
+
+  document.getElementById('nextBtn').disabled = current === totalSlides - 1;
+
+}
+
+
+
+document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+
+document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+
+
+
+window.addEventListener('keydown', (e) => {
+
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+
+  if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+
+});
+
+
+
+/* Autoplay */
+
+let autoTimer = null;
+
+const autoBtn = document.getElementById('autoBtn');
+
+autoBtn.addEventListener('click', () => {
+
+  if (autoTimer) {
+
+    clearInterval(autoTimer);
+
+    autoTimer = null;
+
+    autoBtn.classList.remove('playing');
+
+    autoBtn.textContent = '▶';
+
+  } else {
+
+    autoBtn.classList.add('playing');
+
+    autoBtn.textContent = '❚❚';
+
+    autoTimer = setInterval(() => {
+
+      if (current >= totalSlides - 1) { goTo(0); }
+
+      else { goTo(current + 1); }
+
+    }, 5000);
+
+  }
+
+});
+
+
+
+/* Toggle panels (juvenile vs adult crime) */
+
+document.addEventListener('click', (e) => {
+
+  if (e.target.classList.contains('toggle-btn')) {
+
+    const panelId = e.target.dataset.panel;
+
+    const siblingBtns = e.target.parentElement.querySelectorAll('.toggle-btn');
+
+    siblingBtns.forEach(b => b.classList.remove('active'));
+
+    e.target.classList.add('active');
+
+    const parentSlide = e.target.closest('.slide');
+
+    parentSlide.querySelectorAll('.toggle-panel').forEach(p => p.classList.remove('show'));
+
+    parentSlide.querySelector('#' + panelId).classList.add('show');
+
+  }
+
+});
+
+
+
+/* Swipe support for touch devices */
+
+let touchStartX = 0;
+
+document.getElementById('stage').addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+
+document.getElementById('stage').addEventListener('touchend', (e) => {
+
+  const dx = e.changedTouches[0].clientX - touchStartX;
+
+  if (dx > 50) goTo(current - 1);
+
+  if (dx < -50) goTo(current + 1);
+
+});
+
+
+
+goTo(0);
+
+</script>
+
+</body>
+
+</html>  
